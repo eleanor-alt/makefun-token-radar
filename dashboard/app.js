@@ -23,12 +23,17 @@
         else node.setAttribute(key, value);
       }
     }
-    for (var i = 2; i < arguments.length; i++) {
-      var child = arguments[i];
-      if (child === null || child === undefined) continue;
-      node.appendChild(typeof child === 'string' ? document.createTextNode(child) : child);
-    }
+    for (var i = 2; i < arguments.length; i++) appendKids(node, arguments[i]);
     return node;
+  }
+
+  function appendKids(node, child) {
+    if (child === null || child === undefined) return;
+    if (Array.isArray(child)) {
+      child.forEach(function (c) { appendKids(node, c); });
+      return;
+    }
+    node.appendChild(typeof child === 'string' ? document.createTextNode(child) : child);
   }
 
   function fmtUsd(v) {
